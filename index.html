@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download SAM4S Drivers & Manual</title>
+    <title>SAM4S Download Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" href="style.css?v=1.001">
     <style>
@@ -94,6 +94,69 @@
     </footer>
 
     <script>
+        // 다국어 데이터 정의
+        const LANG_DATA = {
+            ko: {
+                title: "Download SAM4S Drivers & Manual",
+                placeholder: "제품 모델명을 입력하세요",
+                results: "검색 결과",
+                noResult: "해당 모델명을 찾을 수 없습니다.",
+                download: "다운로드",
+                privacy: "개인정보처리방침",
+                terms: "이용약관"
+            },
+            en: {
+                title: "Download SAM4S Drivers & Manual",
+                placeholder: "Enter product model name",
+                results: "Search Results",
+                noResult: "Model not found.",
+                download: "Download",
+                privacy: "Privacy Policy",
+                terms: "Terms of Service"
+            },
+            ja: {
+                title: "SAM4S ドライバ & マニュアル ダウンロード",
+                placeholder: "製品モデル名を入力してください",
+                results: "検索結果",
+                noResult: "該当するモデル名が見つかりません。",
+                download: "ダウンロード",
+                privacy: "個人情報保護方針",
+                terms: "利用規約"
+            },
+            it: {
+                title: "Scarica Driver e Manuali SAM4S",
+                placeholder: "Inserisci il nome del modello",
+                results: "Risultati della ricerca",
+                noResult: "Modello non trovato.",
+                download: "Scarica",
+                privacy: "Informativa sulla privacy",
+                terms: "Termini di servizio"
+            },
+            de: {
+                title: "SAM4S Treiber & Handbücher Herunterladen",
+                placeholder: "Produktmodellnamen eingeben",
+                results: "Suchergebnisse",
+                noResult: "Modell nicht gefunden.",
+                download: "Download",
+                privacy: "Datenschutzerklärung",
+                terms: "Nutzungsbedingungen"
+            }
+        };
+
+        // 접속 언어 감지 (기본값: en)
+        const userLang = (navigator.language || navigator.userLanguage).slice(0, 2).toLowerCase();
+        const currentLang = LANG_DATA[userLang] ? userLang : 'en';
+        const t = LANG_DATA[currentLang];
+
+        // 페이지 텍스트 초기화
+        document.title = t.title;
+        document.getElementById('mainTitle').textContent = t.title;
+        document.getElementById('searchInput').placeholder = t.placeholder;
+        document.getElementById('resultLabel').textContent = t.results;
+        document.getElementById('noResultMessage').textContent = t.noResult;
+        document.getElementById('privacyLink').textContent = t.privacy;
+        document.getElementById('termsLink').textContent = t.terms;
+
         const FILE_DATA = {
             "SAPH660": [
                 { name: "Graphic Driver", url: "#", type: "Driver" },
