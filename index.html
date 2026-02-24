@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download SAM4S Drivers & Manual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #ffffff;
+        }
+        .search-shadow {
+            box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+        }
+        .search-shadow:hover, .search-shadow:focus-within {
+            box-shadow: 0 2px 8px rgba(32,33,36,0.35);
+        }
+        .result-card:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col items-center pt-[15vh] px-4">
+        
+        <!-- Header Text -->
+        <h1 class="text-3xl md:text-4xl font-medium text-[#202124] mb-8 text-center">
+            Download SAM4S Drivers & Manual
+        </h1>
+
+        <!-- Search Bar Container -->
+        <div class="w-full max-w-[584px] relative">
+            <div class="search-shadow flex items-center border border-[#dfe1e5] rounded-full px-5 py-3 transition-all">
+                <svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <input 
+                    type="text" 
+                    id="searchInput"
+                    placeholder="제품 모델명을 입력하세요 (예: GIANT-100, ELLIX-30)"
+                    class="w-full outline-none text-lg text-[#202124]"
+                    autocomplete="off"
+                >
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsContainer" class="w-full max-w-[584px] mt-8 hidden">
+            <h2 class="text-sm text-gray-500 mb-4 px-2">검색 결과</h2>
+            <div id="resultsList" class="border border-gray-200 rounded-lg overflow-hidden">
+                <!-- 리스트 아이템이 여기에 동적으로 추가됩니다 -->
+            </div>
+        </div>
+
+        <!-- Empty/No Result Message -->
+        <div id="noResultMessage" class="mt-12 text-gray-500 hidden">
+            해당 모델명을 찾을 수 없습니다. 정확한 모델명을 입력해주세요.
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#f2f2f2] text-sm text-[#70757a] py-4 px-8 mt-12">
+        <div class="max-w-6xl mx-auto">
+            © 2024 SAM4S Download Center. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * 수정해야 할 부분: FILE_DATA
+         * 각 모델명(Key)에 맞춰 다운로드할 파일 리스트를 배열로 정의하세요.
+         */
+        const FILE_DATA = {
+            "GIANT-100": [
+                { name: "Windows Driver (v1.2.3)", url: "#", type: "Driver" },
+                { name: "User Manual (Korean)", url: "#", type: "Manual" },
+                { name: "Configuration Tool", url: "#", type: "Utility" }
+            ],
+            "ELLIX-30": [
+                { name: "Windows Driver (v2.0.1)", url: "#", type: "Driver" },
+                { name: "OPOS Driver", url: "#", type: "Driver" },
+                { name: "Service Manual", url: "#", type: "Manual" }
+            ],
+            "FORZA": [
+                { name: "Main Board Chipset Driver", url: "#", type: "Driver" },
+                { name: "Touch Panel Driver", url: "#", type: "Driver" }
+            ]
+        };
+
+        const searchInput = document.getElementById('searchInput');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const resultsList = document.getElementById('resultsList');
+        const noResultMessage = document.getElementById('noResultMessage');
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim().toUpperCase();
+            renderResults(query);
+        });
+
+        function renderResults(query) {
+            // 입력값이 없으면 리스트를 숨김
+            if (!query) {
+                resultsContainer.classList.add('hidden');
+                noResultMessage.classList.add('hidden');
+                return;
+            }
+
+            // FILE_DATA에서 해당 모델이 있는지 확인 (대소문자 구분 없이 부분 일치 검색 가능하게 변경 가능)
+            // 여기서는 정확한 모델명 키값을 기준으로 예시를 작성했습니다.
+            const matchedModel = Object.keys(FILE_DATA).find(key => key.includes(query));
+            
+            if (matchedModel) {
+                const files = FILE_DATA[matchedModel];
+                resultsList.innerHTML = ''; // 초기화
+
+                files.forEach(file => {
+                    const item = document.createElement('div');
+                    item.className = 'result-card p-4 border-b last:border-b-0 flex justify-between items-center transition-colors cursor-pointer';
+                    item.innerHTML = `
+                        <div class="flex flex-col">
+                            <span class="text-[#1a0dab] text-lg font-medium hover:underline">${file.name}</span>
+                            <span class="text-xs text-green-700 uppercase font-semibold mt-1">${file.type}</span>
+                        </div>
+                        <a href="${file.url}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm font-medium">
+                            다운로드
+                        </a>
+                    `;
+                    // 텍스트 영역 클릭 시에도 다운로드 링크 작동
+                    item.onclick = () => { window.location.href = file.url; };
+                    resultsList.appendChild(item);
+                });
+
+                resultsContainer.classList.remove('hidden');
+                noResultMessage.classList.add('hidden');
+            } else {
+                resultsContainer.classList.add('hidden');
+                noResultMessage.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
