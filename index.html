@@ -9,71 +9,95 @@
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background-color: #ffffff;
+            background-color: #202124; /* 구글 다크모드 배경색 */
+            color: #e8eaed;
         }
-        .search-shadow {
-            box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+        /* 검색창 커스텀 스타일 */
+        .search-container {
+            background-color: #4d5156;
+            border: 1px solid transparent;
+            transition: background-color 0.2s, box-shadow 0.2s;
         }
-        .search-shadow:hover, .search-shadow:focus-within {
-            box-shadow: 0 2px 8px rgba(32,33,36,0.35);
+        .search-container:hover, .search-container:focus-within {
+            background-color: #5f6368;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.3);
+        }
+        /* 결과 카드 커스텀 스타일 */
+        .result-card {
+            border-color: #3c4043;
+            background-color: #202124;
         }
         .result-card:hover {
-            background-color: #f8f9fa;
+            background-color: #303134;
+        }
+        /* 스크롤바 커스텀 (다크모드용) */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #202124;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3c4043;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5f6368;
         }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
     <!-- Main Content -->
-    <main class="flex-grow flex flex-col items-center pt-[15vh] px-4">
+    <main class="flex-grow flex flex-col items-center pt-[18vh] px-4">
         
         <!-- Header Text -->
-        <h1 class="text-3xl md:text-4xl font-medium text-[#202124] mb-8 text-center">
+        <h1 class="text-3xl md:text-4xl font-medium text-[#e8eaed] mb-8 text-center">
             Download SAM4S Drivers & Manual
         </h1>
 
         <!-- Search Bar Container -->
         <div class="w-full max-w-[584px] relative">
-            <div class="search-shadow flex items-center border border-[#dfe1e5] rounded-full px-5 py-3 transition-all">
-                <svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="search-container flex items-center rounded-full px-5 py-3">
+                <svg class="w-5 h-5 text-[#9aa0a6] mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
                 <input 
                     type="text" 
                     id="searchInput"
-                    placeholder="제품 모델명을 입력하세요 (예: GIANT-100, ELLIX-30)"
-                    class="w-full outline-none text-lg text-[#202124]"
+                    placeholder="제품 모델명을 입력하세요 (예: SAPH660, ASTRA663)"
+                    class="w-full bg-transparent outline-none text-lg text-white placeholder-[#9aa0a6]"
                     autocomplete="off"
                 >
             </div>
         </div>
 
         <!-- Results Section -->
-        <div id="resultsContainer" class="w-full max-w-[584px] mt-8 hidden">
-            <h2 class="text-sm text-gray-500 mb-4 px-2">검색 결과</h2>
-            <div id="resultsList" class="border border-gray-200 rounded-lg overflow-hidden">
+        <div id="resultsContainer" class="w-full max-w-[650px] mt-10 hidden">
+            <h2 class="text-sm text-[#9aa0a6] mb-4 px-2">검색 결과</h2>
+            <div id="resultsList" class="border border-[#3c4043] rounded-xl overflow-hidden bg-[#202124]">
                 <!-- 리스트 아이템이 여기에 동적으로 추가됩니다 -->
             </div>
         </div>
 
         <!-- Empty/No Result Message -->
-        <div id="noResultMessage" class="mt-12 text-gray-500 hidden">
-            해당 모델명을 찾을 수 없습니다. 정확한 모델명을 입력해주세요.
+        <div id="noResultMessage" class="mt-12 text-[#9aa0a6] hidden">
+            해당 모델명을 찾을 수 없습니다.
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-[#f2f2f2] text-sm text-[#70757a] py-4 px-8 mt-12">
-        <div class="max-w-6xl mx-auto">
-            © 2024 SAM4S Download Center. All rights reserved.
+    <footer class="bg-[#171717] text-sm text-[#9aa0a6] py-4 px-8 mt-12 border-t border-[#303134]">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <span>© 2026 SAM4S Download Center</span>
+            <div class="space-x-4">
+                <a href="#" class="hover:underline">개인정보처리방침</a>
+                <a href="#" class="hover:underline">이용약관</a>
+            </div>
         </div>
     </footer>
 
     <script>
-        /**
-         * 수정해야 할 부분: FILE_DATA
-         * 각 모델명(Key)에 맞춰 다운로드할 파일 리스트를 배열로 정의하세요.
-         */
         const FILE_DATA = {
             "GIANT-100": [
                 { name: "Windows Driver (v1.2.3)", url: "#", type: "Driver" },
@@ -102,35 +126,36 @@
         });
 
         function renderResults(query) {
-            // 입력값이 없으면 리스트를 숨김
             if (!query) {
                 resultsContainer.classList.add('hidden');
                 noResultMessage.classList.add('hidden');
                 return;
             }
 
-            // FILE_DATA에서 해당 모델이 있는지 확인 (대소문자 구분 없이 부분 일치 검색 가능하게 변경 가능)
-            // 여기서는 정확한 모델명 키값을 기준으로 예시를 작성했습니다.
             const matchedModel = Object.keys(FILE_DATA).find(key => key.includes(query));
             
             if (matchedModel) {
                 const files = FILE_DATA[matchedModel];
-                resultsList.innerHTML = ''; // 초기화
+                resultsList.innerHTML = '';
 
                 files.forEach(file => {
                     const item = document.createElement('div');
-                    item.className = 'result-card p-4 border-b last:border-b-0 flex justify-between items-center transition-colors cursor-pointer';
+                    item.className = 'result-card p-5 border-b last:border-b-0 flex justify-between items-center transition-colors cursor-pointer';
                     item.innerHTML = `
                         <div class="flex flex-col">
-                            <span class="text-[#1a0dab] text-lg font-medium hover:underline">${file.name}</span>
-                            <span class="text-xs text-green-700 uppercase font-semibold mt-1">${file.type}</span>
+                            <span class="text-[#8ab4f8] text-lg font-medium hover:underline">${file.name}</span>
+                            <span class="text-[11px] text-[#bdc1c6] uppercase tracking-wider font-semibold mt-1">${file.type}</span>
                         </div>
-                        <a href="${file.url}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm font-medium">
-                            다운로드
-                        </a>
+                        <div class="flex items-center text-[#9aa0a6] text-sm">
+                            <span class="mr-2">다운로드</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                        </div>
                     `;
-                    // 텍스트 영역 클릭 시에도 다운로드 링크 작동
-                    item.onclick = () => { window.location.href = file.url; };
+                    item.onclick = (e) => { 
+                        window.location.href = file.url; 
+                    };
                     resultsList.appendChild(item);
                 });
 
