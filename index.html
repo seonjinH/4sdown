@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAM4S Download Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" href="style.css?v=1.002">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" href="style.css?v=1.003">
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
@@ -65,7 +65,7 @@
                 <input 
                     type="text" 
                     id="searchInput"
-                    placeholder="제품 모델명을 입력하세요 (예: SAPH660, ASTRA663)"
+                    placeholder="제품 모델명을 입력하세요 (예: SAPH660)"
                     class="w-full bg-transparent outline-none text-lg text-white placeholder-[#9aa0a6]"
                     autocomplete="off"
                 >
@@ -102,8 +102,6 @@
                 results: "검색 결과",
                 noResult: "해당 모델명을 찾을 수 없습니다.",
                 download: "다운로드",
-                privacy: "개인정보처리방침",
-                terms: "이용약관"
             },
             en: {
                 title: "Download SAM4S Drivers & Manual",
@@ -111,8 +109,6 @@
                 results: "Search Results",
                 noResult: "Model not found.",
                 download: "Download",
-                privacy: "Privacy Policy",
-                terms: "Terms of Service"
             },
             ja: {
                 title: "SAM4S ドライバ & マニュアル ダウンロード",
@@ -120,8 +116,6 @@
                 results: "検索結果",
                 noResult: "該当するモデル名が見つかりません。",
                 download: "ダウンロード",
-                privacy: "個人情報保護方針",
-                terms: "利用規約"
             },
             it: {
                 title: "Scarica Driver e Manuali SAM4S",
@@ -129,8 +123,6 @@
                 results: "Risultati della ricerca",
                 noResult: "Modello non trovato.",
                 download: "Scarica",
-                privacy: "Informativa sulla privacy",
-                terms: "Termini di servizio"
             },
             de: {
                 title: "SAM4S Treiber & Handbücher Herunterladen",
@@ -138,8 +130,6 @@
                 results: "Suchergebnisse",
                 noResult: "Modell nicht gefunden.",
                 download: "Download",
-                privacy: "Datenschutzerklärung",
-                terms: "Nutzungsbedingungen"
             }
         };
 
@@ -205,7 +195,7 @@
                             <span class="text-[11px] text-[#bdc1c6] uppercase tracking-wider font-semibold mt-1">${file.type}</span>
                         </div>
                         <div class="flex items-center text-[#9aa0a6] text-sm">
-                            <span class="mr-2">DOWNLOAD</span>
+                            <span class="mr-2">다운로드</span>
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                             </svg>
